@@ -2,7 +2,10 @@ package nbp;
 
 import org.junit.Test;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -11,10 +14,21 @@ public class CurrencyReaderTest {
     CurrencyReader currencyReader = new CurrencyReader();
 
 
+    private Currency create (){
+
+        List<Rates> rates = new ArrayList<>();
+        rates.add(new Rates("2019-09-04", 3.9285, 4.0079 ));
+        rates.add(new Rates("2019-09-05", 3.9038, 3.9826 ));
+        rates.add(new Rates("2019-09-06", 3.8745, 3.9527 ));
+        rates.add(new Rates("2019-09-09", 3.8899, 3.9685 ));
+        return new Currency("USD", rates);
+    }
+
     @org.junit.Test
-    public void readInfoTest() {
-        LocalDate startDate = LocalDate.now().minusDays(3);
-        Currency actual = currencyReader.readInfo(startDate);
+    public void readInfoTest() throws IOException {
+        LocalDate startDate = LocalDate.now().minusDays(10);
+        System.out.println(startDate);
+        Currency actual = currencyReader.readInfo(String.valueOf(startDate));
 
         System.out.println(actual);
         //there is no info from saturday, sunday, holiday/festival days
@@ -22,7 +36,7 @@ public class CurrencyReaderTest {
 
     @Test
     public void printRatesTest() {
-        Currency currency = currencyReader.readInfo(LocalDate.now().minusDays(3));
+        Currency currency = create();
         CurrencyReader.printRates(currency);
     }
 
