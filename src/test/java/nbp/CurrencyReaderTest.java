@@ -26,9 +26,9 @@ public class CurrencyReaderTest {
 
     @org.junit.Test
     public void readInfoTest() throws IOException {
-        LocalDate startDate = LocalDate.now().minusDays(10);
+        String startDate = "2019-09-05";
         System.out.println(startDate);
-        Currency actual = currencyReader.readInfo(String.valueOf(startDate));
+        Currency actual = currencyReader.readInfo(startDate);
 
         System.out.println(actual);
         //there is no info from saturday, sunday, holiday/festival days

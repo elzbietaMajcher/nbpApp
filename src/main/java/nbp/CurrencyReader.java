@@ -7,7 +7,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 public class CurrencyReader {
 
@@ -46,11 +49,11 @@ public class CurrencyReader {
 
         DecimalFormat df = new DecimalFormat("#.####");
 
-        System.out.println("Exchange rate of currency " + currency.code + ":");
-        currency.rates.stream().forEach(c -> System.out.println(String.format(
-                c.effectiveDate + ", buy exchange rate " + df.format(c.bid) +" PLN, sell exchange rate " +  df.format(c.ask) +" PLN")));
-        double sellDifference = calculateDifferenceValue(currency.rates.get(0).ask, currency.rates.get(currency.rates.size()-1).ask);
-        double buyDifference = calculateDifferenceValue(currency.rates.get(0).bid, currency.rates.get(currency.rates.size()-1).bid);
+        System.out.println("Exchange rate of currency " + currency.getCode()+ ":");
+        currency.getRates().stream().forEach(c -> System.out.println(String.format(
+                c.getEffectiveDate() + ", buy exchange rate " + df.format(c.getBid()) +" PLN, sell exchange rate " +  df.format(c.getAsk()) +" PLN")));
+        double sellDifference = calculateDifferenceValue(currency.getRates().get(0).getAsk(), currency.getRates().get(currency.getRates().size()-1).getAsk());
+        double buyDifference = calculateDifferenceValue(currency.getRates().get(0).getBid(), currency.getRates().get(currency.getRates().size()-1).getBid());
 
         System.out.println("The difference in sell exchange rate: " +  df.format(sellDifference) + " PLN.");
         System.out.println("The difference in buy exchange rate: " +  df.format(buyDifference) + " PLN.");
@@ -59,5 +62,6 @@ public class CurrencyReader {
     public static double calculateDifferenceValue (double todayValue, double pastValue) {
         return todayValue - pastValue;
     }
+
 
 }
