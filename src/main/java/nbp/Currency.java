@@ -1,10 +1,9 @@
 package nbp;
 
-
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+
 
 public class Currency {
 
@@ -24,19 +23,57 @@ public class Currency {
                 '}';
     }
 
-    public String getCode() {
-        return code;
+    public boolean isEmpty() {
+        if (code == null && rates == null) return true;
+        return false;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public String printInfo(String pastDate) {
+
+        StringBuilder sb = new StringBuilder();
+
+        if (isEmpty()) {
+            return "There is no data for a given period of time.";
+        } else {
+            if (checkMissingDays(pastDate)) sb.append("Note that for several days there is no data available.\n");
+            DecimalFormat df = new DecimalFormat("#.####");
+            double sellDifference = calculateSellDifferences();
+            double buyDifference = calculateBuyDifferences();
+
+            sb.append(code + " exchange rate:\n");
+            sb.append(printRates(df));
+            sb.append("The difference in sell exchange rate: " + df.format(sellDifference) + " PLN.\n");
+            sb.append("The difference in buy exchange rate: " + df.format(buyDifference) + " PLN.\n");
+        }
+        return String.valueOf(sb);
     }
 
-    public List<Rates> getRates() {
-        return rates;
+    String printRates(DecimalFormat df) {
+
+        StringBuilder sb = new StringBuilder();
+        rates.stream().forEach(c -> sb.append(
+                c.getEffectiveDate() + ", buy exchange rate " + df.format(c.getBid()) + " PLN, sell exchange rate " + df.format(c.getAsk()) + " PLN\n"));
+        return String.valueOf(sb);
     }
 
-    public void setRates(List<Rates> rates) {
-        this.rates = rates;
+    double calculateSellDifferences() {
+        return calculateDifferenceValue(rates.get(rates.size() - 1).getAsk(), rates.get(0).getAsk());
+    }
+
+    double calculateBuyDifferences() {
+        return calculateDifferenceValue(rates.get(rates.size() - 1).getBid(), rates.get(0).getBid());
+    }
+
+    double calculateDifferenceValue(double todayValue, double pastValue) {
+        return todayValue - pastValue;
+    }
+
+    boolean checkMissingDays(String pastDate) {
+        LocalDate today = LocalDate.now();
+        LocalDate past = LocalDate.parse(pastDate);
+        long days = today.toEpochDay() - past.toEpochDay();
+
+        if (days != (rates.size() - 1)) return true;
+        return false;
     }
 }

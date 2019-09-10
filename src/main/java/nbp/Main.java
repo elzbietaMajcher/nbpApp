@@ -1,32 +1,30 @@
 package nbp;
 
-import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
 
         CurrencyReader currencyReader = new CurrencyReader();
-        boolean repeat = false;
+        boolean repeat;
         Scanner sc = new Scanner(System.in);
 
         do {
-            try {
 
+            try {
+                System.out.println("To see USD exchange rate of currency from given date to today");
                 System.out.println("Input a past date in this format yyyy-mm-dd");
                 String pastDate = sc.nextLine();
 
-
                 Currency currency = currencyReader.readInfo(pastDate);
-                CurrencyReader.printRates(currency);
+                System.out.println(currency.printInfo(pastDate));
 
-                System.out.println("To repeat press y");
+                System.out.println("To repeat press y, to exit any other key");
                 if (sc.nextLine().equals("y")) repeat = true;
                 else repeat = false;
 
-
             } catch (Exception e) {
-                System.out.println("Input date format not correct, or input date is future date.");
+
                 repeat = true;
             }
 
