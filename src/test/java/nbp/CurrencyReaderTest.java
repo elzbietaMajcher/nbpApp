@@ -1,12 +1,10 @@
 package nbp;
 
-import java.io.IOException;
-
 public class CurrencyReaderTest {
 
 
     @org.junit.Test
-    public void readInfoTest(){
+    public void readInfoTest() throws Exception {
         String startDate = "2019-09-05";
         Currency actual = CurrencyReader.readInfo(startDate);
 

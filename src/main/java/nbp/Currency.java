@@ -6,7 +6,6 @@ import java.util.List;
 
 
 public class Currency {
-
     private String code; // USD
     private List<Rates> rates;
 
@@ -24,8 +23,7 @@ public class Currency {
     }
 
     public boolean isEmpty() {
-        if (code == null && rates == null) return true;
-        return false;
+        return code == null && rates == null;
     }
 
     public String printInfo(String pastDate) {
@@ -40,10 +38,10 @@ public class Currency {
             double sellDifference = calculateSellDifferences();
             double buyDifference = calculateBuyDifferences();
 
-            sb.append(code + " exchange rate:\n");
+            sb.append(code).append(" exchange rate:\n");
             sb.append(printRates(df));
-            sb.append("The difference in sell exchange rate: " + df.format(sellDifference) + " PLN.\n");
-            sb.append("The difference in buy exchange rate: " + df.format(buyDifference) + " PLN.\n");
+            sb.append("The difference in sell exchange rate: ").append(df.format(sellDifference)).append(" PLN.\n");
+            sb.append("The difference in buy exchange rate: ").append(df.format(buyDifference)).append(" PLN.\n");
         }
         return String.valueOf(sb);
     }
@@ -51,8 +49,7 @@ public class Currency {
     String printRates(DecimalFormat df) {
 
         StringBuilder sb = new StringBuilder();
-        rates.stream().forEach(c -> sb.append(
-                c.getEffectiveDate() + ", buy exchange rate " + df.format(c.getBid()) + " PLN, sell exchange rate " + df.format(c.getAsk()) + " PLN\n"));
+        rates.forEach(c -> sb.append(c.getEffectiveDate()).append(", buy exchange rate ").append(df.format(c.getBid())).append(" PLN, sell exchange rate ").append(df.format(c.getAsk())).append(" PLN\n"));
         return String.valueOf(sb);
     }
 
@@ -73,7 +70,6 @@ public class Currency {
         LocalDate past = LocalDate.parse(pastDate);
         long days = today.toEpochDay() - past.toEpochDay();
 
-        if (days != (rates.size() - 1)) return true;
-        return false;
+        return days != (rates.size() - 1);
     }
 }
