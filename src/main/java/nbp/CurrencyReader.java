@@ -1,6 +1,7 @@
 package nbp;
 
 import com.google.gson.Gson;
+
 import java.net.URL;
 import java.net.URLConnection;
 import java.time.LocalDate;
@@ -35,10 +36,12 @@ public class CurrencyReader {
 
         } catch (Exception e) {
             System.out.println(e);
-            System.out.println("Input date format not correct, or input date is a future date.");
+            if (e.getMessage().contains("400")) {
+                System.out.println("400 Bad Request or 93 days limit exceeded");
+                System.out.println("Or input date is a future date.\n");
+            } else
+                System.out.println("Input date format not correct.\n");
         }
         return currencyToSave;
     }
-
-
 }
